@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Register</div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.csrf_token }}
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.confirm_password.label(class="form-label") }}
+                        {{ form.confirm_password(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.first_name.label(class="form-label") }}
+                        {{ form.first_name(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.last_initial.label(class="form-label") }}
+                        {{ form.last_initial(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.phone_number.label(class="form-label") }}
+                        {{ form.phone_number(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.role.label(class="form-label") }}
+                        {{ form.role(class="form-select") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                <p class="mt-3">
+                    Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

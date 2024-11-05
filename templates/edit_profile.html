@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Edit Profile</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.first_name.label(class="form-label") }}
+                                {{ form.first_name(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.last_initial.label(class="form-label") }}
+                                {{ form.last_initial(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.phone_number.label(class="form-label") }}
+                        {{ form.phone_number(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.profile_picture.label(class="form-label") }}
+                        {{ form.profile_picture(class="form-control") }}
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a href="{{ url_for('profile') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
