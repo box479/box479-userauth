@@ -1,15 +1,8 @@
-import os
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.utils import secure_filename
 from app import app, db
 from models import User
 from forms import LoginForm, RegisterForm, EditProfileForm
-
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def index():
@@ -53,7 +46,8 @@ def register():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html')
+    users = User.query.order_by(User.role.asc()).all()
+    return render_template('profile.html', users=users)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -63,14 +57,6 @@ def edit_profile():
         current_user.first_name = form.first_name.data
         current_user.last_initial = form.last_initial.data
         current_user.phone_number = form.phone_number.data
-        
-        if form.profile_picture.data:
-            file = form.profile_picture.data
-            if file and allowed_file(file.filename):
-                filename = secure_filename(f"user_{current_user.id}_{file.filename}")
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                current_user.profile_picture = filename
-        
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('profile'))

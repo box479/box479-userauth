@@ -8,21 +8,4 @@ document.addEventListener('DOMContentLoaded', function() {
             e.target.value = !x[2] ? x[1] : `(${x[1]}) ${x[2]}${x[3] ? '-' + x[3] : ''}`;
         });
     });
-
-    // Profile picture preview
-    const profilePicInput = document.querySelector('input[name="profile_picture"]');
-    if (profilePicInput) {
-        profilePicInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
-                    alert('Please select a valid image file (JPEG, PNG, or GIF)');
-                    e.target.value = '';
-                } else if (file.size > 5 * 1024 * 1024) {
-                    alert('File size must be less than 5MB');
-                    e.target.value = '';
-                }
-            }
-        });
-    }
 });

@@ -10,7 +10,6 @@ class User(UserMixin, db.Model):
     last_initial = db.Column(db.String(1), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
     role = db.Column(db.String(20), nullable=False)
-    profile_picture = db.Column(db.String(256))
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

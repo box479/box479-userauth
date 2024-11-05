@@ -20,7 +20,6 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,
 }
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # initialize extensions
 db.init_app(app)

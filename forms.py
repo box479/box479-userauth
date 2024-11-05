@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, FileField
+from wtforms import StringField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
 class LoginForm(FlaskForm):
@@ -36,4 +36,3 @@ class EditProfileForm(FlaskForm):
         Length(min=1, max=1)
     ])
     phone_number = StringField('Phone Number', validators=[DataRequired()])
-    profile_picture = FileField('Profile Picture')
