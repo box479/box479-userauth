@@ -3,6 +3,16 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from models import User
 from forms import LoginForm, RegisterForm, EditProfileForm
+from functools import wraps
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.role != 'admin':
+            flash('You do not have permission to access this page.', 'danger')
+            return redirect(url_for('profile'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/')
 def index():
@@ -80,6 +90,26 @@ def edit_profile():
             app.logger.error(f"Error updating profile: {str(e)}")
     
     return render_template('edit_profile.html', form=form)
+
+@app.route('/delete_user/<int:user_id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_user(user_id):
+    if current_user.id == user_id:
+        flash('You cannot delete your own account!', 'danger')
+        return redirect(url_for('profile'))
+    
+    user = User.query.get_or_404(user_id)
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        flash(f'User {user.first_name} {user.last_initial}. has been deleted.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('An error occurred while deleting the user.', 'danger')
+        app.logger.error(f"Error deleting user: {str(e)}")
+    
+    return redirect(url_for('profile'))
 
 @app.route('/logout')
 @login_required
