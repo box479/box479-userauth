@@ -53,17 +53,32 @@ def profile():
 @login_required
 def edit_profile():
     form = EditProfileForm()
-    if form.validate_on_submit():
-        current_user.first_name = form.first_name.data
-        current_user.last_initial = form.last_initial.data
-        current_user.phone_number = form.phone_number.data
-        db.session.commit()
-        flash('Profile updated successfully!', 'success')
-        return redirect(url_for('profile'))
+    if request.method == 'GET':
+        # Pre-populate form with current user data
+        form.first_name.data = current_user.first_name
+        form.last_initial.data = current_user.last_initial
+        form.phone_number.data = current_user.phone_number
     
-    form.first_name.data = current_user.first_name
-    form.last_initial.data = current_user.last_initial
-    form.phone_number.data = current_user.phone_number
+    if form.validate_on_submit():
+        try:
+            # Get the current user from the database
+            user = User.query.get(current_user.id)
+            if user:
+                # Update user fields
+                user.first_name = form.first_name.data
+                user.last_initial = form.last_initial.data
+                user.phone_number = form.phone_number.data
+                # Commit changes
+                db.session.commit()
+                flash('Profile updated successfully!', 'success')
+                return redirect(url_for('profile'))
+            else:
+                flash('User not found!', 'danger')
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred while updating your profile.', 'danger')
+            app.logger.error(f"Error updating profile: {str(e)}")
+    
     return render_template('edit_profile.html', form=form)
 
 @app.route('/logout')
